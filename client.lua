@@ -21,7 +21,7 @@ end)
 
 
 --menyn som ska öppnas
-local openPedMenu = function() 
+function openPedMenu()
     local elements = {}
 
     table.insert(elements, {label = "Return to default outfit", value = "return"})
@@ -42,12 +42,12 @@ local openPedMenu = function()
             if data.current.value == "return" then
 
                 ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin, jobSkin)
-                    local player
+                    local player = nil
 
                     if skin.sex == 0 then
-                        player = `mp_m_freemode_01`
+                        player = GetHashKey("mp_m_freemode_01")
                     else
-                        player = `mp_f_freemode_01`
+                        player = GetHashKey("mp_f_freemode_01")
                     end
 
                     RequestModel(player)
@@ -56,7 +56,9 @@ local openPedMenu = function()
                     end
 
                     SetPlayerModel(PlayerId(), player)
+                    SetModelAsNoLongerNeeded(player)
                     TriggerEvent('skinchanger:loadSkin', skin)
+                    TriggerEvent('esx:restoreLoadout')
 
                 end)
             elseif data.current.value == "choose" then
@@ -69,18 +71,27 @@ local openPedMenu = function()
         )
 end
 
-local openPedChooseMenu = function() 
+function openPedChooseMenu() 
 
     ESX.UI.Menu.CloseAll()
         ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'choosePedMenu',
 	{
         title    = 'What ped would you like to select?',
     }, function(data, menu)
-            menu.close()
+
             local ped = GetHashKey(data.value)
 
+            RequestModel(ped)
+			while not HasModelLoaded(ped) do
+                RequestModel(ped)
+				Citizen.Wait(0)
+            end
+            
             if data.value ~= nil and IsModelValid(ped) then
                 SetPlayerModel(PlayerId(), ped)
+                TriggerEvent('esx:restoreLoadout')
+                ESX.ShowNotification("Ped selected.")
+                menu.close()
             else
                 ESX.ShowNotification("Please write any valid ped.")
             end
@@ -94,7 +105,7 @@ end
 RegisterCommand('PedAction', function(source, args)
 
     if group ~= "user" then
-        TriggerServerCallback('ludvig-pedmenu:addPedMenu', function(access)
+        ESX.TriggerServerCallback('ludvig-pedmenu:addPedMenu', function(access)
             if access then
                 ESX.ShowNotification("Player added to access the menu. Please send the same message again to remove the permission.") 
             else
@@ -106,14 +117,13 @@ end)
 
 
 RegisterCommand('OpenPedMenu', function(source)
-    
-    if group ~= "user" then
-        TriggerServerCallback('ludvig-pedmenu:checkAccess', function(access)
+
+        ESX.TriggerServerCallback('ludvig-pedmenu:checkAccess', function(access)
             if access then
                 ESX.ShowNotification("Menu opened.") 
+                openPedMenu()
             else
                 ESX.ShowNotification("You are denied to access the menu. Please contact an administrator.") 
             end
-        end, args[1])
-    end
+        end)
 end)
