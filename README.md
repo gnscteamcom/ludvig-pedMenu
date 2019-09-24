@@ -1,6 +1,6 @@
 # ludvig-pedMenu
 
-**Functions/Information**
+# Functions/Information
 
 - PedMenu opened with command: /OpenPedMenu
 - PedMenu actions for admins only: /PedActions (hex-id to accept)
