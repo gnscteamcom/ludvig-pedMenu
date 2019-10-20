@@ -20,7 +20,6 @@ AddEventHandler('es_admin:setGroup', function(g)
 end)
 
 
---menyn som ska öppnas
 function openPedMenu()
     local elements = {}
 
@@ -72,7 +71,6 @@ function openPedMenu()
 end
 
 function openPedChooseMenu() 
-
     ESX.UI.Menu.CloseAll()
         ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'choosePedMenu',
 	{
@@ -103,7 +101,6 @@ function openPedChooseMenu()
 end
 
 RegisterCommand('PedAction', function(source, args)
-
     if group ~= "user" then
         ESX.TriggerServerCallback('ludvig-pedmenu:addPedMenu', function(access)
             if access then
