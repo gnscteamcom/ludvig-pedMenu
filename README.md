@@ -12,6 +12,7 @@ FiveM, es_extended - Special pedMenu, Admins can choose who can access the menu 
 - PedMenu opened with command: /OpenPedMenu
 - PedMenu actions for admins only: /PedActions (hex-id to accept)
 - Select citizen wear or a random ped, that you can write.
+- Everyone's permissions disappear at restart. = No SQL :)
 
 # Requirements
 
