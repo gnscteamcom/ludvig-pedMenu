@@ -106,7 +106,7 @@ RegisterCommand('PedAction', function(source, args)
             if access then
                 ESX.ShowNotification("Player added to access the menu. Please send the same message again to remove the permission.") 
             else
-                ESX.ShowNotification("Player denied to access the menu. Please send the same message again to add permission again.") 
+                ESX.ShowNotification("Player denied to access the menu. Please send the same message again to add the permission.") 
             end
         end, args[1])
     end
